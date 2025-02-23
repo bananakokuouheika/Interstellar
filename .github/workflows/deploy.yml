@@ -1,0 +1,28 @@
+name: Deploy to Server
+
+on:
+  push:
+    branches:
+      - main  # main ブランチにプッシュ時に実行
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H your-server.com >> ~/.ssh/known_hosts
+
+      - name: Deploy Files
+        run: |
+          rsync -avz --delete ./ your-user@your-server.com:/var/www/html/
+
+      - name: Restart Server
+        run: ssh your-user@your-server.com "sudo systemctl restart nginx"
