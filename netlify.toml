@@ -1,0 +1,10 @@
+[build]
+  command = "npm install"  # 必要ならビルドコマンドを指定
+  functions = "functions"  # サーバーレス関数のディレクトリ（後述）
+
+[build.environment]
+  NODE_VERSION = "18"  # Node.jsのバージョン指定
+
+[dev]
+  command = "node index.js"  # ローカル実行時のコマンド
+  port = 8888  # ローカルでのポート番号
